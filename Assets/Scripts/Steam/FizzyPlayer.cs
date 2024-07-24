@@ -19,6 +19,7 @@ namespace Steamworks
         public bool ready;
         
         [SyncVar] public GameObject playerModel;
+        [SyncVar] public GameObject playerCamera;
         
         #region Singleton
 
@@ -86,6 +87,7 @@ namespace Steamworks
             _controller.enabled = true;
             
             playerModel.SetActive(true);
+            playerCamera.SetActive(true);
         }
 
         [Command]

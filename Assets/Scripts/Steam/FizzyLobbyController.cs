@@ -45,7 +45,7 @@ namespace Steamworks
 
         public void HostLobby()
         {
-            if (lobbyName.text != "")
+            if (lobbyName.text == "")
             {
                 Debug.Log("Lobby name is empty");
             }

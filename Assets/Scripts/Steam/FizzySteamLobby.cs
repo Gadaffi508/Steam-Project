@@ -88,7 +88,7 @@ namespace Steamworks
         void OnJoinRequest(GameLobbyJoinRequested_t callback)
         {
             Debug.Log("Requested");
-            //SteamChatManager.Instance.OpenChat();
+            FizzyChat.Instance.OpenChat();
             SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
         }
 
@@ -107,7 +107,7 @@ namespace Steamworks
 
         void MatchLobby(LobbyMatchList_t callback)
         {
-            //if (FindLobbyManager.Instance.lobbyList.Count > 0) FindLobbyManager.Instance.ClearLobby();
+            if (FizzyLobbies.Instance.lobbyList.Count > 0) FizzyLobbies.Instance.ClearLobby();
 
             for (int i = 0; i < callback.m_nLobbiesMatching; i++)
             {
@@ -129,12 +129,12 @@ namespace Steamworks
 
             string message = System.Text.Encoding.UTF8.GetString(data);
 
-            //SteamChatManager.Instance.DisplayChatMessage(SteamFriends.GetFriendPersonaName(steamIDUser), message);
+            FizzyChat.Instance.DisplayChatMessage(SteamFriends.GetFriendPersonaName(steamIDUser), message);
         }
 
         void GetLobbyData(LobbyDataUpdate_t callback)
         {
-            //FindLobbyManager.Instance.DisplayLobby(lobbyID, callback);
+            FizzyLobbies.Instance.DisplayLobby(lobbyID, callback);
         }
     }
 }
