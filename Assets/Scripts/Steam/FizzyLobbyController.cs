@@ -3,6 +3,7 @@ using System.Linq;
 using Mirror;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Steamworks
 {
@@ -12,6 +13,7 @@ namespace Steamworks
         private void Awake() => Instance = this;
 
         public TMP_InputField lobbyName;
+        public TMP_Text lobbyNameText;
         
         [Header("Player Item")] public GameObject playerListItemViewContent;
         public GameObject playerListItemPrefab;
@@ -19,6 +21,9 @@ namespace Steamworks
 
         [Header("Lobby")] public ulong currentLobbyID;
         public bool playerItemCreated = false;
+
+        [Header("Ready")] public Button startGameButton;
+        public TMP_Text readyButtonText;
 
         private List<PlayerItem> _playerListItems = new List<PlayerItem>();
         public FizzyPlayer localObject;
@@ -40,12 +45,67 @@ namespace Steamworks
 
         public void HostLobby()
         {
-            if (lobbyName.text == string.Empty)
+            if (lobbyName.text != "")
             {
                 Debug.Log("Lobby name is empty");
             }
+            else 
+                Debug.Log("Lobby name is  " + lobbyName.text);
+            
+            FizzySteamLobby.Instance.HostLobby(lobbyName.text);
+
+            lobbyNameText.text = lobbyName.text + "'s Lobby";
+        }
+
+        public void ReadyPlayer()
+        {
+            localObject.ChangeReady();
+        }
+
+        public void UpdateButton()
+        {
+            if (localObject.ready)
+            {
+                readyButtonText.text = "UnReady";
+            }
             else
-                FizzySteamLobby.Instance.HostLobby(lobbyName.text);
+            {
+                readyButtonText.text = "Ready";
+            }
+        }
+
+        public void CheckIfAllReady()
+        {
+            bool allReady = false;
+
+            foreach (FizzyPlayer player in Manager.GamePlayer)
+            {
+                if (player.ready)
+                {
+                    allReady = true;
+                }
+                else
+                {
+                    allReady = false;
+                    break;
+                }
+            }
+
+            if (allReady == true)
+            {
+                if (localObject.playerIdNumber == 1)
+                {
+                    startGameButton.interactable = true;
+                }
+                else
+                {
+                    startGameButton.interactable = false;
+                }
+            }
+            else
+            {
+                startGameButton.interactable = false;
+            }
         }
 
         public void UpdateLobbyName()
@@ -73,6 +133,7 @@ namespace Steamworks
                 newPlayerItemComponent.playerName = player.playerName;
                 newPlayerItemComponent.connectionID = player.connectionID;
                 newPlayerItemComponent.playerSteamID = player.playerSteamId;
+                newPlayerItemComponent.ready = player.ready;
                 newPlayerItemComponent.SetPlayerValues();
 
                 _playerListItems.Add(newPlayerItemComponent);
@@ -92,6 +153,7 @@ namespace Steamworks
                     newPlayerItemComponent.playerName = player.playerName;
                     newPlayerItemComponent.connectionID = player.connectionID;
                     newPlayerItemComponent.playerSteamID = player.playerSteamId;
+                    newPlayerItemComponent.ready = player.ready;
                     newPlayerItemComponent.SetPlayerValues();
 
                     _playerListItems.Add(newPlayerItemComponent);
@@ -114,10 +176,16 @@ namespace Steamworks
                     if (playerList.connectionID == player.connectionID)
                     {
                         playerList.playerName = player.playerName;
+                        playerList.ready = player.ready;
                         playerList.SetPlayerValues();
+                        if (player == localObject)
+                        {
+                            UpdateButton();
+                        }
                     }
                 }
             }
+            CheckIfAllReady();
         }
 
         #endregion
@@ -130,19 +198,7 @@ namespace Steamworks
 
         public void StartGame(string sceneName)
         {
-            //localObject.CanStartGame(sceneName);
-        }
-
-        void CreatePlayer(FizzyPlayer player)
-        {
-            GameObject newPlayerItem = Instantiate(playerListItemPrefab, playerListItemViewContent.transform);
-            PlayerItem newPlayerItemComponent = newPlayerItem.GetComponent<PlayerItem>();
-            newPlayerItemComponent.playerName = player.playerName;
-            newPlayerItemComponent.connectionID = player.connectionID;
-            newPlayerItemComponent.playerSteamID = player.playerSteamId;
-            newPlayerItemComponent.SetPlayerValues();
-
-            _playerListItems.Add(newPlayerItemComponent);
+            localObject.CanStartGame(sceneName);
         }
     }
 }

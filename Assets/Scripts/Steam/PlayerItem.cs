@@ -15,12 +15,30 @@ namespace Steamworks
         public TMP_Text playerNameText;
         public RawImage playerIcon;
 
+        public TMP_Text readyText;
+        public bool ready;
+
         protected Callback<AvatarImageLoaded_t> ImageLoaded;
         private void Start() => ImageLoaded = Callback<AvatarImageLoaded_t>.Create(OnImageLoaded);
+
+        public void ChangeReadyStatus()
+        {
+            if (ready)
+            {
+                readyText.text = "Ready";
+                readyText.color = Color.green;
+            }
+            else
+            {
+                readyText.text = "UnReady";
+                readyText.color = Color.red;
+            }
+        }
 
         public void SetPlayerValues()
         {
             playerNameText.text = playerName;
+            ChangeReadyStatus();
             if(!_avatarReceived) GetPlayerIcon();
         }
 

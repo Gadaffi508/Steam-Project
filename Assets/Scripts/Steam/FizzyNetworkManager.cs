@@ -15,7 +15,7 @@ namespace Steamworks
 
         public override void OnServerAddPlayer(NetworkConnectionToClient conn)
         {
-            if(SceneManager.GetActiveScene().name != gameScene) return;
+            //if(SceneManager.GetActiveScene().name != gameScene) return;
             
             FizzyPlayer gamePlayerInstance = Instantiate(gamePlayerPrefabs);
         
