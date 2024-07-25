@@ -28,7 +28,6 @@ namespace Steamworks
 
         public void JoinLobby()
         {
-            joinButton.interactable = false;
             FizzySteamLobby.Instance.JoinLobby(lobbyID);
             FizzyChat.Instance.OpenChat();
         }
