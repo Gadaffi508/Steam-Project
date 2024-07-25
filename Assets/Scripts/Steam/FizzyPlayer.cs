@@ -125,5 +125,10 @@ namespace Steamworks
                 FizzyLobbyController.Instance.UpdatePlayerList();
             }
         }
+
+        public void SetDisplayName(string displayName)
+        {
+            CmdSetPlayerName(displayName);
+        }
     }
 }

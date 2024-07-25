@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Steamworks
 {
-    public class PlayerCamera : MonoBehaviour
+    public class PlayerCamera : NetworkBehaviour
     {
         private const float YMin = -50f;
         private const float YMax = 50f;
@@ -17,8 +17,11 @@ namespace Steamworks
 
         private bool _clickEscape = false;
 
+        [ClientCallback]
         private void LateUpdate()
         {
+            if(!isLocalPlayer) return;
+            
             currentX += Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
             currentY += Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
             

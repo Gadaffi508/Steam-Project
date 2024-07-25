@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace Steamworks
 {
-    public class FizzyStop : MonoBehaviour
+    public class FizzyStop : NetworkBehaviour
     {
         public int sceneID;
 
@@ -41,12 +41,13 @@ namespace Steamworks
             else
                 Debug.Log("Lobby ID : " + lobbyID);
         
-            Manager.StopHost();
-
             Manager.networkAddress = "HostAddress";
-        
-            Manager.StopClient();
 
+            if(isServer)
+                Manager.StopHost();
+            else
+                Manager.StopClient();
+            
             SceneManager.LoadScene(sceneID);
         }
     }

@@ -14,8 +14,6 @@ namespace Steamworks
         public TMP_Text lobbyNameText;
         public TMP_Text lobbyMembersText;
 
-        public Button joinButton;
-
         public void SetLobbyData()
         {
             if (lobbyName == "")

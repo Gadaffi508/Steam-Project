@@ -65,6 +65,7 @@ namespace Steamworks
         {
             if (lobbyID.Count > 0) lobbyID.Clear();
 
+            SteamMatchmaking.AddRequestLobbyListResultCountFilter(60);
             SteamMatchmaking.RequestLobbyList();
         }
 

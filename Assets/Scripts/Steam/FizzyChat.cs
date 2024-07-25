@@ -14,6 +14,8 @@ namespace Steamworks
         public TMP_InputField chatMessage;
 
         public GameObject text;
+        public GameObject lobbyScrollView;
+        public GameObject lobbiesScrollView;
 
         public Transform content;
 
@@ -59,6 +61,9 @@ namespace Steamworks
         {
             if(chatMessage.gameObject.activeSelf is false)
                 chatMessage.gameObject.SetActive(true);
+            
+            lobbiesScrollView.SetActive(false);
+            lobbyScrollView.SetActive(true);
         }
     }
 }
