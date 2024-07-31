@@ -110,7 +110,7 @@ namespace Steamworks
 
         public void UpdateLobbyName()
         {
-            currentLobbyID = Manager.GetComponent<FizzySteamLobby>().CurrentLobbyID;
+            currentLobbyID = FizzySteamLobby.Instance.CurrentLobbyID;
         }
 
         public void UpdatePlayerList()

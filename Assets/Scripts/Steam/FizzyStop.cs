@@ -42,12 +42,11 @@ namespace Steamworks
                 Debug.Log("Lobby ID : " + lobbyID);
         
             Manager.networkAddress = "HostAddress";
-
-            if(isServer)
-                Manager.StopHost();
-            else
-                Manager.StopClient();
-            
+#if _SERVER
+            Manager.StopHost();
+#else
+            Manager.StopClient();
+#endif
             SceneManager.LoadScene(sceneID);
         }
     }

@@ -54,20 +54,20 @@ namespace Steamworks
             if (numPlayers >= 2)
             {
                 conn.Disconnect();
+                Debug.Log("OnServerConnect -----------------");
                 return;
             }
 
             if (SceneManager.GetActiveScene().name != "LobbyScene")
             {
                 conn.Disconnect();
+                Debug.Log("OnServerConnect -----------------LobbyScene");
                 return;
             }
         }
 
         public override void OnServerAddPlayer(NetworkConnectionToClient conn)
         {
-            if(SceneManager.GetActiveScene().name != "LobbyScene") return;
-            
             FizzyPlayer gamePlayerInstance = Instantiate(gamePlayerPrefabs);
         
             gamePlayerInstance.connectionID = conn.connectionId;
