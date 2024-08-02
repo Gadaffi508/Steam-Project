@@ -22,7 +22,7 @@ namespace Steamworks
         [Header("Lobby")] public ulong currentLobbyID;
         public bool playerItemCreated = false;
 
-        [Header("Ready")] public Button startGameButton;
+        [Header("Ready")]
         public TMP_Text readyButtonText;
 
         private List<PlayerItem> _playerListItems = new List<PlayerItem>();
@@ -89,22 +89,6 @@ namespace Steamworks
                     allReady = false;
                     break;
                 }
-            }
-
-            if (allReady == true)
-            {
-                if (localObject.playerIdNumber == 1)
-                {
-                    startGameButton.interactable = true;
-                }
-                else
-                {
-                    startGameButton.interactable = false;
-                }
-            }
-            else
-            {
-                startGameButton.interactable = false;
             }
         }
 

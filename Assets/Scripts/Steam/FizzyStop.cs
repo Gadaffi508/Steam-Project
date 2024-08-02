@@ -9,10 +9,11 @@ namespace Steamworks
         public int sceneID;
 
         public CSteamID lobbyID;
-    
+
         #region Singleton
 
         private FizzyNetworkManager _manager;
+
         private FizzyNetworkManager Manager
         {
             get
@@ -36,18 +37,28 @@ namespace Steamworks
 
         public void LeaveGame()
         {
-            if(lobbyID != (CSteamID)0)
-                FizzySteamLobby.Instance.LeaveGame(lobbyID);
-            else
-                Debug.Log("Lobby ID : " + lobbyID);
-        
-            Manager.networkAddress = "HostAddress";
-#if _SERVER
-            Manager.StopHost();
-#else
-            Manager.StopClient();
-#endif
+            Manager.offlineScene = "";
+            
             SceneManager.LoadScene(sceneID);
+            
+            FizzySteamLobby.Instance.LeaveGame(lobbyID);
+
+            Manager.networkAddress = "localhost";
+
+            if (isLocalPlayer)
+            {
+                if (isServer)
+                {
+                    Manager.StopHost();
+                }
+                else
+                {
+                    Manager.StopClient();
+                }
+            }else
+            {
+                Manager.StopClient();
+            }
         }
     }
 }

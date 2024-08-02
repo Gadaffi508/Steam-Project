@@ -27,23 +27,12 @@ namespace Steamworks
 
         protected Callback<LobbyChatMsg_t> lobbyChatMsg;
 
-        #region Singleton
-
         private FizzyNetworkManager _manager;
-
-        private FizzyNetworkManager Manager
-        {
-            get
-            {
-                if (_manager != null) return _manager;
-                return _manager = NetworkManager.singleton as FizzyNetworkManager;
-            }
-        }
-
-        #endregion
 
         private void Start()
         {
+            _manager = GetComponent<FizzyNetworkManager>();
+            
             if (!SteamManager.Initialized) return;
 
             lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
@@ -60,7 +49,7 @@ namespace Steamworks
         {
             lobbyName = lobbyNames;
             
-            SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, Manager.maxConnections);
+            SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, 4);
         }
 
         public void LeaveGame(CSteamID lobbyID)

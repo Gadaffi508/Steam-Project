@@ -10,7 +10,7 @@ namespace Steamworks
     public class FizzyNetworkManager : NetworkManager
     {
         public FizzyPlayer gamePlayerPrefabs;
-        public FizzyPlayer gamePlayerLobby = null;
+        public FizzyPlayer gamePlayerLobby;
         
         public List<FizzyPlayer> GamePlayer = new List<FizzyPlayer>();
 
@@ -51,19 +51,7 @@ namespace Steamworks
         
         public override void OnServerConnect(NetworkConnectionToClient conn)
         {
-            if (numPlayers >= 2)
-            {
-                conn.Disconnect();
-                Debug.Log("OnServerConnect -----------------");
-                return;
-            }
-
-            if (SceneManager.GetActiveScene().name != "LobbyScene")
-            {
-                conn.Disconnect();
-                Debug.Log("OnServerConnect -----------------LobbyScene");
-                return;
-            }
+            Debug.Log("OnServerConnect -----------------Connect");
         }
 
         public override void OnServerAddPlayer(NetworkConnectionToClient conn)
@@ -84,17 +72,17 @@ namespace Steamworks
         {
             if (SceneManager.GetActiveScene().name == "LobbyScene" && newSceneName.StartsWith("Game"))
             {
-                for (int i = GamePlayer.Count - 1; i >= 0; i--)
+                /*for (int i = GamePlayer.Count - 1; i >= 0; i--)
                 {
-                    /*var conn = GamePlayer[i].connectionToClient;
+                    var conn = GamePlayer[i].connectionToClient;
                     var gamePlayerInstance = Instantiate(gamePlayerLobby);
                     gamePlayerInstance.SetDisplayName(GamePlayer[i].name);
                     
                     NetworkServer.Destroy(conn.identity.gameObject);
 
                     NetworkServer.ReplacePlayerForConnection(conn, gamePlayerInstance.gameObject);
-                    */
                 }
+                Debug.Log("Server changed");*/
             }
             
             base.ServerChangeScene(newSceneName);
@@ -111,6 +99,7 @@ namespace Steamworks
         {
             if (newSceneName.StartsWith("Game"))
             {
+                Debug.Log("OnServerChangeScene");
                 GameObject playerSpawnSystemInstance = Instantiate(playerSpawnSystem);
                 NetworkServer.Spawn(playerSpawnSystemInstance);
             }
