@@ -27,12 +27,23 @@ namespace Steamworks
 
         protected Callback<LobbyChatMsg_t> lobbyChatMsg;
 
+        #region Singleton
+
         private FizzyNetworkManager _manager;
+
+        private FizzyNetworkManager Manager
+        {
+            get
+            {
+                if (_manager != null) return _manager;
+                return _manager = NetworkManager.singleton as FizzyNetworkManager;
+            }
+        }
+
+        #endregion
 
         private void Start()
         {
-            _manager = GetComponent<FizzyNetworkManager>();
-            
             if (!SteamManager.Initialized) return;
 
             lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
@@ -76,7 +87,8 @@ namespace Steamworks
 
             Debug.Log("Lobby created");
 
-            _manager.StartHost();
+            Manager.StopHost(); // Ensure previous host is stopped
+            Manager.StartHost();
 
             CSteamID ulSteamID = new CSteamID(callback.m_ulSteamIDLobby);
 
@@ -103,8 +115,9 @@ namespace Steamworks
 
             Debug.Log("Newtork Adress : ------------------" + _manager.networkAddress);
 
-            _manager.networkAddress = SteamMatchmaking.GetLobbyData(ulSteamID, "HostAddress");
-            _manager.StartClient();
+            Manager.networkAddress = SteamMatchmaking.GetLobbyData(ulSteamID, "HostAddress");
+            Manager.StopClient(); // Ensure previous client is stopped
+            Manager.StartClient();
         }
 
         void MatchLobby(LobbyMatchList_t callback)

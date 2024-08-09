@@ -15,6 +15,8 @@ namespace Steamworks
         public List<FizzyPlayer> GamePlayer = new List<FizzyPlayer>();
 
         public GameObject playerSpawnSystem = null;
+
+        public NetworkConnectionToClient _conn;
         public static event Action OnClientConnected;
         public static event Action OnClientDisconnected;
         public static event Action<NetworkConnection> OnServerReadied; 

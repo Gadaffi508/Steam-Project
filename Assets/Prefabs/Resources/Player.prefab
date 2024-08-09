@@ -360,6 +360,7 @@ MonoBehaviour:
   speed: 500
   rotationSpeed: 5
   sprintMultiplier: 2
+  jumpForce: 4
   _rb: {fileID: 2951502535184714332}
   _animator: {fileID: 3485487554124348372}
 --- !u!114 &4297168499372729757

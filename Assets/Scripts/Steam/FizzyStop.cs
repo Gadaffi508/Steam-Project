@@ -39,6 +39,14 @@ namespace Steamworks
         {
             Manager.offlineScene = "";
             
+            // Unregister all lobby callbacks
+            /*Callback<LobbyCreated_t>.Unregister();
+            Callback<GameLobbyJoinRequested_t>.Unregister();
+            Callback<LobbyEnter_t>.Unregister();
+            Callback<LobbyMatchList_t>.Unregister();
+            Callback<LobbyDataUpdate_t>.Unregister();
+            Callback<LobbyChatMsg_t>.Unregister();*/
+            
             SceneManager.LoadScene(sceneID);
             
             FizzySteamLobby.Instance.LeaveGame(lobbyID);
@@ -59,6 +67,8 @@ namespace Steamworks
             {
                 Manager.StopClient();
             }
+            
+            Manager.StopHost();
         }
     }
 }

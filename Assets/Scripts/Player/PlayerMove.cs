@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using UnityEngine;
 
@@ -9,10 +10,14 @@ namespace Steamworks
         public float rotationSpeed;
         public float sprintMultiplier;
         
+        public float jumpForce;
+        
         private float _X, _Y, currentSpeed;
         private Vector3 _movement;
         private bool isSprinting;
+        private bool isJumping;
         private int sprinting;
+        private bool isGrounded;
         
         public Rigidbody _rb;
         public Animator _animator;
@@ -40,6 +45,8 @@ namespace Steamworks
             _Y = Input.GetAxis("Vertical");
         
             isSprinting = Input.GetKey(KeyCode.LeftShift);
+            
+            isJumping = Input.GetKeyDown(KeyCode.Space);
 
             #endregion
         
@@ -59,6 +66,11 @@ namespace Steamworks
         void RpcMove(float x, float y, float _currentspeed)
         {
             direction = new Vector3(x, 0, y).normalized;
+            
+            if (isJumping && isGrounded)
+            {
+                Jump();
+            }
         
             Vector3 cameraForward = Camera.main.transform.forward;
         
@@ -76,12 +88,33 @@ namespace Steamworks
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
             }
         }
-        
+
+        void Jump()
+        {
+            _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+            JumpAnim(true);
+        }
+
+        void OnCollisionEnter(Collision other)
+        {
+            if (other.gameObject.CompareTag("Ground"))
+            {
+                isGrounded = true;
+                JumpAnim(false);
+            }
+        }
+
         void Animations()
         {
             _animator.SetFloat("velocity",direction.magnitude);
         
             _animator.SetFloat("Sprint", sprinting);
+        }
+
+        void JumpAnim(bool isAnim)
+        {
+            _animator.SetBool("İsJump",isAnim);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using UnityEngine;
 
@@ -18,26 +19,30 @@ namespace Steamworks
         private bool _clickEscape = false;
 
         [ClientCallback]
+        void Update()
+        {
+            currentX += Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
+            currentY -= Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
+            
+            currentY = Mathf.Clamp(currentY, YMin, YMax);
+            
+            Cursor.lockState = _clickEscape ? CursorLockMode.None : CursorLockMode.Locked;
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+                _clickEscape = !_clickEscape;
+        }
+
+        [ClientCallback]
         private void LateUpdate()
         {
             if(!isLocalPlayer) return;
             
-            currentX += Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
-            currentY += Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
-            
-            currentY = Mathf.Clamp(currentY, YMin, YMax);
-            Quaternion rotation = Quaternion.Euler(currentY, currentX, 0f);
+            Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
             Vector3 direction = new Vector3(0, 0, -distance);
-            transform.position = lookAt.position + rotation * direction;
+            Vector3 position = lookAt.position + rotation * direction;
 
+            transform.position = position;
             transform.LookAt(lookAt.position);
-
-            if (_clickEscape is true)
-                Cursor.lockState = CursorLockMode.Locked;
-            else Cursor.lockState = CursorLockMode.None;
-
-            if (Input.GetKeyDown(KeyCode.Escape))
-                _clickEscape = !_clickEscape;
         }
     }
 }
